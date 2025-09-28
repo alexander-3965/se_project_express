@@ -6,7 +6,6 @@ const {
   likeItem,
   dislikeItem,
 } = require("../controllers/clothingItems");
-// const { users } = require();
 
 router.get("/", getClothingItems);
 
@@ -19,11 +18,9 @@ router.put("/:itemId/likes", likeItem);
 router.delete("/:itemId/likes", dislikeItem);
 
 router.use((req, res) => {
-  if (res.statusCode === 404) {
-    res.status(404).json({
-      message: "Requested resource not found",
-    });
-  }
+  res.status(404).json({
+    message: "Requested resource not found",
+  });
 });
 
 module.exports = router;

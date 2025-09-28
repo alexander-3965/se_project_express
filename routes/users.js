@@ -8,11 +8,9 @@ router.get("/:userId", getUser);
 router.post("/", createUser);
 
 router.use((req, res) => {
-  if (res.statusCode === 404) {
-    res.status(404).json({
-      message: "Requested resource not found",
-    });
-  }
+  res.status(404).json({
+    message: "Requested resource not found",
+  });
 });
 
 module.exports = router;

@@ -27,7 +27,7 @@ const clothingItemSchema = new mongoose.Schema({
   owner: {
     required: true,
     type: mongoose.Schema.Types.ObjectId,
-    ref: "owner",
+    ref: "user",
   },
   createdAt: {
     type: Date,

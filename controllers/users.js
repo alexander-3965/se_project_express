@@ -10,11 +10,12 @@ const {
 
 module.exports.getUsers = (req, res) => {
   User.find({})
-    .orFail()
     .then((users) => res.status(GOOD_REQUEST_STATUS_CODE).send(users))
     .catch((err) => {
       console.log(err);
-      res.status(SERVER_ISSUE).send({ message: "Error" });
+      res
+        .status(SERVER_ISSUE)
+        .send({ message: "An error has occured on the server." });
     });
 };
 
@@ -34,7 +35,7 @@ module.exports.getUser = (req, res) => {
         return res.status(RESOURCE_NOT_FOUND).send({ message: err.message });
       }
       return res.status(SERVER_ISSUE).send({
-        message: err.message,
+        message: "An error has occured on the server.",
       });
     });
 };
@@ -52,7 +53,7 @@ module.exports.createUser = (req, res) => {
           .send({ message: err.message });
       }
       return res.status(SERVER_ISSUE).send({
-        message: err.message,
+        message: "An error has occured on the server.",
       });
     });
 };

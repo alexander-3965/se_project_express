@@ -11,14 +11,15 @@ const {
 module.exports.getClothingItems = (req, res) => {
   clothingItem
     .find({})
-    .orFail()
     .then((clothes) => res.status(GOOD_REQUEST_STATUS_CODE).send(clothes))
     .catch((err) => {
       console.log(err);
       if (err.name === "DocumentNotFoundError") {
         return res.status(RESOURCE_NOT_FOUND).send({ message: err.message });
       }
-      return res.status(SERVER_ISSUE).send({ message: err.message });
+      return res
+        .status(SERVER_ISSUE)
+        .send({ message: "An error has occured on the server." });
     });
 };
 
@@ -38,9 +39,9 @@ module.exports.createClothingItem = (req, res) => {
           .status(BAD_REQUEST_STATUS_CODE)
           .send({ message: err.message });
       }
-      return res.status(SERVER_ISSUE).send({
-        message: err.message,
-      });
+      return res
+        .status(SERVER_ISSUE)
+        .send({ message: "An error has occured on the server." });
     });
 };
 
@@ -65,9 +66,9 @@ module.exports.likeItem = (req, res) =>
           .status(BAD_REQUEST_STATUS_CODE)
           .send({ message: err.message });
       }
-      return res.status(SERVER_ISSUE).send({
-        message: err.message,
-      });
+      return res
+        .status(SERVER_ISSUE)
+        .send({ message: "An error has occured on the server." });
     });
 
 module.exports.dislikeItem = (req, res) =>
@@ -91,9 +92,9 @@ module.exports.dislikeItem = (req, res) =>
           .status(BAD_REQUEST_STATUS_CODE)
           .send({ message: err.message });
       }
-      return res.status(SERVER_ISSUE).send({
-        message: err.message,
-      });
+      return res
+        .status(SERVER_ISSUE)
+        .send({ message: "An error has occured on the server." });
     });
 
 module.exports.deleteClothingItem = (req, res) =>
@@ -112,5 +113,7 @@ module.exports.deleteClothingItem = (req, res) =>
           .status(BAD_REQUEST_STATUS_CODE)
           .send({ message: err.message });
       }
-      return res.status(SERVER_ISSUE).send(err.message);
+      return res
+        .status(SERVER_ISSUE)
+        .send({ message: "An error has occured on the server." });
     });
