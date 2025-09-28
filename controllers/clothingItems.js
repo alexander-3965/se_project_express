@@ -1,4 +1,4 @@
-const clothingItem = require("../models/clothingItem.js");
+const clothingItem = require("../models/clothingItem");
 
 const {
   GOOD_REQUEST_STATUS_CODE,
@@ -6,7 +6,7 @@ const {
   SERVER_ISSUE,
   BAD_REQUEST_STATUS_CODE,
   RESOURCE_NOT_FOUND,
-} = require("../utils/errors.js");
+} = require("../utils/errors");
 
 module.exports.getClothingItems = (req, res) => {
   clothingItem
@@ -18,7 +18,7 @@ module.exports.getClothingItems = (req, res) => {
       if (err.name === "DocumentNotFoundError") {
         return res.status(RESOURCE_NOT_FOUND).send({ message: err.message });
       }
-      res.status(SERVER_ISSUE).send({ message: err.message });
+      return res.status(SERVER_ISSUE).send({ message: err.message });
     });
 };
 
@@ -32,14 +32,13 @@ module.exports.createClothingItem = (req, res) => {
       res.status(CREATED_REQUEST_STATUS_CODE).send({ data: item })
     )
     .catch((err) => {
-      console.log(err.name);
       console.log(err);
       if (err.name === "ValidationError") {
         return res
           .status(BAD_REQUEST_STATUS_CODE)
           .send({ message: err.message });
       }
-      res.status(SERVER_ISSUE).send({
+      return res.status(SERVER_ISSUE).send({
         message: err.message,
       });
     });
@@ -58,7 +57,6 @@ module.exports.likeItem = (req, res) =>
     })
     .catch((err) => {
       console.log(err);
-      console.log(err.name);
       if (err.name === "DocumentNotFoundError") {
         return res.status(RESOURCE_NOT_FOUND).send({ message: err.message });
       }
@@ -67,7 +65,7 @@ module.exports.likeItem = (req, res) =>
           .status(BAD_REQUEST_STATUS_CODE)
           .send({ message: err.message });
       }
-      res.status(SERVER_ISSUE).send({
+      return res.status(SERVER_ISSUE).send({
         message: err.message,
       });
     });
@@ -84,7 +82,6 @@ module.exports.dislikeItem = (req, res) =>
       res.status(GOOD_REQUEST_STATUS_CODE).send({ data: like });
     })
     .catch((err) => {
-      console.log(err.name);
       console.log(err);
       if (err.name === "DocumentNotFoundError") {
         return res.status(RESOURCE_NOT_FOUND).send({ message: err.message });
@@ -94,7 +91,7 @@ module.exports.dislikeItem = (req, res) =>
           .status(BAD_REQUEST_STATUS_CODE)
           .send({ message: err.message });
       }
-      res.status(SERVER_ISSUE).send({
+      return res.status(SERVER_ISSUE).send({
         message: err.message,
       });
     });
@@ -115,5 +112,5 @@ module.exports.deleteClothingItem = (req, res) =>
           .status(BAD_REQUEST_STATUS_CODE)
           .send({ message: err.message });
       }
-      res.status(SERVER_ISSUE).send(err.message);
+      return res.status(SERVER_ISSUE).send(err.message);
     });

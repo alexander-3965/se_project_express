@@ -1,4 +1,4 @@
-const User = require("../models/user.js");
+const User = require("../models/user");
 
 const {
   GOOD_REQUEST_STATUS_CODE,
@@ -6,7 +6,7 @@ const {
   SERVER_ISSUE,
   BAD_REQUEST_STATUS_CODE,
   RESOURCE_NOT_FOUND,
-} = require("../utils/errors.js");
+} = require("../utils/errors");
 
 module.exports.getUsers = (req, res) => {
   User.find({})
@@ -25,7 +25,6 @@ module.exports.getUser = (req, res) => {
     .then((users) => res.status(GOOD_REQUEST_STATUS_CODE).send(users))
     .catch((err) => {
       console.log(err);
-      console.log(err.name);
       if (err.name === "CastError") {
         return res
           .status(BAD_REQUEST_STATUS_CODE)
