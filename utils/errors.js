@@ -1,0 +1,9 @@
+export const GOOD_REQUEST_STATUS_CODE = 200;
+
+export const CREATED_REQUEST_STATUS_CODE = 201;
+
+export const SERVER_ISSUE = 500;
+
+export const BAD_REQUEST_STATUS_CODE = 400;
+
+export const RESOURCE_NOT_FOUND = 404;
