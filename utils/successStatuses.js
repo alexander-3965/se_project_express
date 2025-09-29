@@ -1,0 +1,5 @@
+module.exports = {
+  GOOD_REQUEST_STATUS_CODE: 200,
+
+  CREATED_REQUEST_STATUS_CODE: 201,
+};

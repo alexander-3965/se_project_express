@@ -3,6 +3,9 @@ const clothingItem = require("../models/clothingItem");
 const {
   GOOD_REQUEST_STATUS_CODE,
   CREATED_REQUEST_STATUS_CODE,
+} = require("../utils/successStatuses");
+
+const {
   SERVER_ISSUE,
   BAD_REQUEST_STATUS_CODE,
   RESOURCE_NOT_FOUND,
