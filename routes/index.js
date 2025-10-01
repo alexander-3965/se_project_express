@@ -8,7 +8,7 @@ const itemRouter = require("./clothingItems");
 
 router.use("/users", userRouter);
 
-router.use("/items", ItemRouter);
+router.use("/items", itemRouter);
 
 router.use((req, res) => {
   res.status(RESOURCE_NOT_FOUND).json({
