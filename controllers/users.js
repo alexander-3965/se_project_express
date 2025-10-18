@@ -29,17 +29,17 @@ module.exports.login = (req, res) => {
       });
     })
     .catch((err) => {
+      console.log(err);
       if (err.message === "Missing password or email") {
         return res
           .status(BAD_REQUEST_STATUS_CODE)
           .send({ message: err.message });
       }
-      res.status(INVALID_CREDENTIALS).send({ message: err.message });
+      return res.status(INVALID_CREDENTIALS).send({ message: err.message });
     });
 };
 
 module.exports.getCurrentUser = (req, res) => {
-  console.log("getting user");
   const userId = req.user._id;
   User.findById(userId)
     .orFail()
@@ -62,19 +62,16 @@ module.exports.getCurrentUser = (req, res) => {
 };
 
 module.exports.createUser = (req, res) => {
-  console.log(" signup route hit");
   const { name, avatar, email, password } = req.body;
 
   bcrypt
     .hash(password, 10)
     .then((hash) => User.create({ name, avatar, email, password: hash }))
     .then((user) => {
-      const userObject = user.toObject();
-      const { password, ...userWithoutPassword } = userObject;
+      const { password: _pw, ...userWithoutPassword } = user.toObject();
       res.status(CREATED_REQUEST_STATUS_CODE).send(userWithoutPassword);
     })
     .catch((err) => {
-      console.log(err.name);
       console.error(err);
       if (err.name === "MongoServerError") {
         return res.status(CONFLICT_ERROR).send({ message: err.message });

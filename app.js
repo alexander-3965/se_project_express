@@ -20,11 +20,6 @@ app.use(express.json());
 
 app.use(cors());
 
-app.get("/test", (req, res) => {
-  console.log("Test route hit!");
-  res.send("Server is working!");
-});
-
 app.post("/signup", createUser);
 
 app.post("/signin", login);

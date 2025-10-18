@@ -102,7 +102,7 @@ module.exports.dislikeItem = (req, res) =>
     });
 
 module.exports.deleteClothingItem = (req, res) => {
-  const itemId = req.params.itemId;
+  const { itemId } = req.params;
   clothingItem
     .findById(itemId)
     .orFail()
@@ -115,7 +115,13 @@ module.exports.deleteClothingItem = (req, res) => {
       }
       return clothingItem
         .findByIdAndDelete(itemId)
-        .then((item) => res.status(GOOD_REQUEST_STATUS_CODE).send(item));
+        .then((deletedItem) =>
+          res.status(GOOD_REQUEST_STATUS_CODE).send(deletedItem)
+        )
+        .catch((err) => {
+          console.log(err);
+          throw new Error("Deletion error");
+        });
     })
 
     .catch((err) => {
