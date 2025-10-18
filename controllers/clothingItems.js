@@ -9,6 +9,7 @@ const {
   SERVER_ISSUE,
   BAD_REQUEST_STATUS_CODE,
   RESOURCE_NOT_FOUND,
+  FORBIDDEN_STATUS_CODE,
 } = require("../utils/errors");
 
 module.exports.getClothingItems = (req, res) => {
@@ -100,13 +101,23 @@ module.exports.dislikeItem = (req, res) =>
         .send({ message: "An error has occured on the server." });
     });
 
-module.exports.deleteClothingItem = (req, res) =>
+module.exports.deleteClothingItem = (req, res) => {
+  const itemId = req.params.itemId;
   clothingItem
-    .findByIdAndDelete(req.params.itemId)
+    .findById(itemId)
     .orFail()
+
     .then((item) => {
-      res.status(GOOD_REQUEST_STATUS_CODE).send({ data: item });
+      if (item.owner.toString() !== req.user._id) {
+        return res
+          .status(FORBIDDEN_STATUS_CODE)
+          .send({ message: "You can only delete your own items" });
+      }
+      return clothingItem
+        .findByIdAndDelete(itemId)
+        .then((item) => res.status(GOOD_REQUEST_STATUS_CODE).send(item));
     })
+
     .catch((err) => {
       if (err.name === "DocumentNotFoundError") {
         return res.status(RESOURCE_NOT_FOUND).send({ message: err.message });
@@ -120,3 +131,4 @@ module.exports.deleteClothingItem = (req, res) =>
         .status(SERVER_ISSUE)
         .send({ message: "An error has occured on the server." });
     });
+};
