@@ -120,7 +120,9 @@ module.exports.deleteClothingItem = (req, res) => {
         )
         .catch((err) => {
           console.log(err);
-          throw new Error("Deletion error");
+          return res.status(SERVER_ISSUE).send({
+            message: "An error occurred while deleting the item",
+          });
         });
     })
 

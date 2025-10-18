@@ -73,8 +73,10 @@ module.exports.createUser = (req, res) => {
     })
     .catch((err) => {
       console.error(err);
-      if (err.name === "MongoServerError") {
-        return res.status(CONFLICT_ERROR).send({ message: err.message });
+      if (err.code === 11000) {
+        return res
+          .status(CONFLICT_ERROR)
+          .send({ message: "Email already in use" });
       }
       if (err.name === "ValidationError") {
         return res

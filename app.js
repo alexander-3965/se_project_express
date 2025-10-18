@@ -26,8 +26,6 @@ app.post("/signin", login);
 
 app.use("/users", auth);
 
-app.use("/items", auth);
-
 app.use("/", mainRouter);
 
 app.listen(PORT, () => {
