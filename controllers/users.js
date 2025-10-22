@@ -42,7 +42,6 @@ module.exports.login = (req, res) => {
 module.exports.getCurrentUser = (req, res) => {
   const userId = req.user._id;
   User.findById(userId)
-    .orFail()
     .then((user) => res.status(GOOD_REQUEST_STATUS_CODE).send(user))
     .catch((err) => {
       console.log(err);
@@ -94,7 +93,6 @@ module.exports.updateUser = (req, res) => {
   const { name, avatar } = req.body;
   const updates = { name, avatar };
   User.findByIdAndUpdate(userId, updates, { new: true, runValidators: true })
-    .orFail()
     .then((user) => res.status(GOOD_REQUEST_STATUS_CODE).send(user))
     .catch((err) => {
       console.error(err);

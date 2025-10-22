@@ -56,15 +56,16 @@ module.exports.likeItem = (req, res) =>
       { $addToSet: { likes: req.user._id } },
       { new: true }
     )
-    .orFail()
     .then((like) => {
+      if (!like) {
+        return res
+          .status(RESOURCE_NOT_FOUND)
+          .send({ message: "Item not found" });
+      }
       res.status(GOOD_REQUEST_STATUS_CODE).send({ data: like });
     })
     .catch((err) => {
       console.log(err);
-      if (err.name === "DocumentNotFoundError") {
-        return res.status(RESOURCE_NOT_FOUND).send({ message: err.message });
-      }
       if (err.name === "CastError") {
         return res
           .status(BAD_REQUEST_STATUS_CODE)
@@ -82,15 +83,16 @@ module.exports.dislikeItem = (req, res) =>
       { $pull: { likes: req.user._id } },
       { new: true }
     )
-    .orFail()
     .then((like) => {
+      if (!like) {
+        return res
+          .status(RESOURCE_NOT_FOUND)
+          .send({ message: "Item not found" });
+      }
       res.status(GOOD_REQUEST_STATUS_CODE).send({ data: like });
     })
     .catch((err) => {
       console.log(err);
-      if (err.name === "DocumentNotFoundError") {
-        return res.status(RESOURCE_NOT_FOUND).send({ message: err.message });
-      }
       if (err.name === "CastError") {
         return res
           .status(BAD_REQUEST_STATUS_CODE)
@@ -105,14 +107,19 @@ module.exports.deleteClothingItem = (req, res) => {
   const { itemId } = req.params;
   clothingItem
     .findById(itemId)
-    .orFail()
 
     .then((item) => {
+      if (!item) {
+        return res
+          .status(RESOURCE_NOT_FOUND)
+          .send({ message: "Item not found" });
+      }
       if (item.owner.toString() !== req.user._id) {
         return res
           .status(FORBIDDEN_STATUS_CODE)
           .send({ message: "You can only delete your own items" });
       }
+
       return clothingItem
         .findByIdAndDelete(itemId)
         .then((deletedItem) =>
@@ -127,9 +134,7 @@ module.exports.deleteClothingItem = (req, res) => {
     })
 
     .catch((err) => {
-      if (err.name === "DocumentNotFoundError") {
-        return res.status(RESOURCE_NOT_FOUND).send({ message: err.message });
-      }
+      console.log(err);
       if (err.name === "CastError") {
         return res
           .status(BAD_REQUEST_STATUS_CODE)
