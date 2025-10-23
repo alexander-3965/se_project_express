@@ -62,7 +62,7 @@ module.exports.likeItem = (req, res) =>
           .status(RESOURCE_NOT_FOUND)
           .send({ message: "Item not found" });
       }
-      res.status(GOOD_REQUEST_STATUS_CODE).send({ data: like });
+      return res.status(GOOD_REQUEST_STATUS_CODE).send({ data: like });
     })
     .catch((err) => {
       console.log(err);
@@ -89,7 +89,7 @@ module.exports.dislikeItem = (req, res) =>
           .status(RESOURCE_NOT_FOUND)
           .send({ message: "Item not found" });
       }
-      res.status(GOOD_REQUEST_STATUS_CODE).send({ data: like });
+      return res.status(GOOD_REQUEST_STATUS_CODE).send({ data: like });
     })
     .catch((err) => {
       console.log(err);
