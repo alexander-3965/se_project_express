@@ -8,16 +8,14 @@ const {
   CREATED_REQUEST_STATUS_CODE,
 } = require("../utils/successStatuses");
 
-const {
-  SERVER_ISSUE,
-  BAD_REQUEST_STATUS_CODE,
-  RESOURCE_NOT_FOUND,
-  CONFLICT_ERROR,
-  INVALID_CREDENTIALS,
-} = require("../utils/errors");
+const BadRequestError = require("../errors/bad-request-error");
+const UnauthorizedError = require("../errors/unauthorized-error");
+const NotFoundError = require("../errors/not-found-error");
+const ConflictError = require("../errors/conflict-error");
+
 const { JWT_SECRET } = require("../utils/config");
 
-module.exports.login = (req, res) => {
+module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
 
   return User.findUserByCredentials(email, password)
@@ -29,38 +27,32 @@ module.exports.login = (req, res) => {
       });
     })
     .catch((err) => {
-      console.log(err);
+      console.err(err);
       if (err.message === "Missing password or email") {
-        return res
-          .status(BAD_REQUEST_STATUS_CODE)
-          .send({ message: err.message });
+        next(new BadRequestError("Missing password or email"));
+      } else {
+        next(new UnauthorizedError("Incorrect password or email"));
       }
-      return res.status(INVALID_CREDENTIALS).send({ message: err.message });
     });
 };
 
-module.exports.getCurrentUser = (req, res) => {
+module.exports.getCurrentUser = (req, res, next) => {
   const userId = req.user._id;
   User.findById(userId)
     .then((user) => res.status(GOOD_REQUEST_STATUS_CODE).send(user))
     .catch((err) => {
-      console.log(err);
-
+      console.err(err);
       if (err.name === "CastError") {
-        return res
-          .status(BAD_REQUEST_STATUS_CODE)
-          .send({ message: err.message });
+        next(new BadRequestError("Invalid user ID"));
       }
       if (err.name === "DocumentNotFoundError") {
-        return res.status(RESOURCE_NOT_FOUND).send({ message: err.message });
+        next(new NotFoundError("User not found"));
       }
-      return res.status(SERVER_ISSUE).send({
-        message: "An error has occured on the server.",
-      });
+      next(err);
     });
 };
 
-module.exports.createUser = (req, res) => {
+module.exports.createUser = (req, res, next) => {
   const { name, avatar, email, password } = req.body;
 
   bcrypt
@@ -73,22 +65,16 @@ module.exports.createUser = (req, res) => {
     .catch((err) => {
       console.error(err);
       if (err.code === 11000) {
-        return res
-          .status(CONFLICT_ERROR)
-          .send({ message: "Email already in use" });
+        next(new ConflictError("Email already in use"));
       }
       if (err.name === "ValidationError") {
-        return res
-          .status(BAD_REQUEST_STATUS_CODE)
-          .send({ message: err.message });
+        next(new BadRequestError("Invalid user data"));
       }
-      return res.status(SERVER_ISSUE).send({
-        message: "An error has occured on the server.",
-      });
+      next(err);
     });
 };
 
-module.exports.updateUser = (req, res) => {
+module.exports.updateUser = (req, res, next) => {
   const userId = req.user._id;
   const { name, avatar } = req.body;
   const updates = { name, avatar };
@@ -97,15 +83,11 @@ module.exports.updateUser = (req, res) => {
     .catch((err) => {
       console.error(err);
       if (err.name === "DocumentNotFoundError") {
-        return res.status(RESOURCE_NOT_FOUND).send({ message: err.message });
+        next(new NotFoundError("User not found"));
       }
       if (err.name === "ValidationError") {
-        return res
-          .status(BAD_REQUEST_STATUS_CODE)
-          .send({ message: err.message });
+        next(new BadRequestError("Invalid user data"));
       }
-      return res.status(SERVER_ISSUE).send({
-        message: "An error has occured on the server.",
-      });
+      next(err);
     });
 };
