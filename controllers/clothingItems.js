@@ -2,20 +2,12 @@ const clothingItem = require("../models/clothingItem");
 
 const NotFoundError = require("../errors/not-found-error");
 const BadRequestError = require("../errors/bad-request-error");
-const ConflictError = require("../errors/conflict-error");
 const ForbiddenError = require("../errors/forbidden-error");
 
 const {
   GOOD_REQUEST_STATUS_CODE,
   CREATED_REQUEST_STATUS_CODE,
 } = require("../utils/successStatuses");
-
-const {
-  SERVER_ISSUE,
-  BAD_REQUEST_STATUS_CODE,
-  RESOURCE_NOT_FOUND,
-  FORBIDDEN_STATUS_CODE,
-} = require("../utils/errors");
 
 module.exports.getClothingItems = (req, res, next) => {
   clothingItem
@@ -57,9 +49,7 @@ module.exports.likeItem = (req, res, next) =>
     )
     .then((like) => {
       if (!like) {
-        return res
-          .status(RESOURCE_NOT_FOUND)
-          .send({ message: "Item not found" });
+        next(new NotFoundError("Item not found"));
       }
       return res.status(GOOD_REQUEST_STATUS_CODE).send({ data: like });
     })
@@ -81,9 +71,6 @@ module.exports.dislikeItem = (req, res, next) =>
     .then((like) => {
       if (!like) {
         next(new NotFoundError("Item not found"));
-        // return res
-        //   .status(RESOURCE_NOT_FOUND)
-        //   .send({ message: "Item not found" });
       }
       return res.status(GOOD_REQUEST_STATUS_CODE).send({ data: like });
     })

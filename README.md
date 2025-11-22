@@ -1,6 +1,12 @@
 # WTWR (What to Wear?): Back End
 
-This is the back-end for WTWR (What to Wear?). It connects a mongoose DB to be able to add/delete users and clothing items. The eventual goal is to create a server with an API and user authorization.
+This is the back-end for WTWR (What to Wear?). It connects a mongoose DB to be able to add/delete users and clothing items.
+
+## Frontend
+
+Check out [this link](https://www.whattoweartripleten.jumpingcrab.com), that contains the deployed project name.
+
+Check out [this link](https://github.com/alexander-3965/se_project_react), that contains the frontend GitHub repo.
 
 ## Technologies
 
@@ -16,5 +22,5 @@ Before committing your code, make sure you edit the file `sprint.txt` in the roo
 
 ## Project Pitch Video
 
-Check out [this video](https://drive.google.com/file/d/1c91p2rueXyBiz1ERuT26mpv0v38-W0Ci/view?usp=sharing), where I describe my
+Check out [this video](https://drive.google.com/file/d/1etGymketylTkmkQFcf3OO5K2mNK_-8TL/view?usp=sharing), where I describe my
 project and some challenges I faced while building it.

@@ -27,7 +27,7 @@ module.exports.login = (req, res, next) => {
       });
     })
     .catch((err) => {
-      console.err(err);
+      console.error(err);
       if (err.message === "Missing password or email") {
         next(new BadRequestError("Missing password or email"));
       } else {
