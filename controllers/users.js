@@ -17,6 +17,7 @@ const { JWT_SECRET } = require("../utils/config");
 
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
+  console.log("Login attempt for email:", email);
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
@@ -29,9 +30,9 @@ module.exports.login = (req, res, next) => {
     .catch((err) => {
       console.error(err);
       if (err.message === "Missing password or email") {
-        next(new BadRequestError("Missing password or email"));
+        return next(new BadRequestError("Missing password or email"));
       } else {
-        next(new UnauthorizedError("Incorrect password or email"));
+        return next(new UnauthorizedError("Incorrect password or email"));
       }
     });
 };
