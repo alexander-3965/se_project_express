@@ -3,14 +3,10 @@ const { JWT_SECRET } = require("../utils/config");
 const UnauthorizedError = require("../errors/unauthorized-error");
 
 module.exports = (req, res, next) => {
-  const handleAuthError = () => {
-    return next(new UnauthorizedError("Authorization Error"));
-  };
-
   const { authorization } = req.headers;
 
   if (!authorization || !authorization.startsWith("Bearer ")) {
-    return handleAuthError();
+    return next(new UnauthorizedError("Authorization Error"));
   }
 
   const token = authorization.replace("Bearer ", "");
@@ -20,7 +16,7 @@ module.exports = (req, res, next) => {
   try {
     payload = jwt.verify(token, JWT_SECRET);
   } catch (err) {
-    return handleAuthError();
+    return next(new UnauthorizedError("Authorization Error"));
   }
 
   req.user = payload;
