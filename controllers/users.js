@@ -41,7 +41,7 @@ module.exports.getCurrentUser = (req, res, next) => {
   User.findById(userId)
     .then((user) => res.status(GOOD_REQUEST_STATUS_CODE).send(user))
     .catch((err) => {
-      console.err(err);
+      console.error(err);
       if (err.name === "CastError") {
         next(new BadRequestError("Invalid user ID"));
       }
