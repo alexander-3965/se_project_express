@@ -4,7 +4,7 @@ const UnauthorizedError = require("../errors/unauthorized-error");
 
 module.exports = (req, res, next) => {
   const handleAuthError = () => {
-    next(new UnauthorizedError("Authorization Error"));
+    return next(new UnauthorizedError("Authorization Error"));
   };
 
   const { authorization } = req.headers;
