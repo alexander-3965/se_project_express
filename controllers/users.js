@@ -31,9 +31,8 @@ module.exports.login = (req, res, next) => {
       console.error(err);
       if (err.message === "Missing password or email") {
         return next(new BadRequestError("Missing password or email"));
-      } else {
-        return next(new UnauthorizedError("Incorrect password or email"));
       }
+      return next(new UnauthorizedError("Incorrect password or email"));
     });
 };
 
@@ -49,7 +48,7 @@ module.exports.getCurrentUser = (req, res, next) => {
       if (err.name === "DocumentNotFoundError") {
         return next(new NotFoundError("User not found"));
       }
-      next(err);
+      return next(err);
     });
 };
 
