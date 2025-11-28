@@ -49,7 +49,7 @@ module.exports.likeItem = (req, res, next) =>
     )
     .then((like) => {
       if (!like) {
-        next(new NotFoundError("Item not found"));
+        return next(new NotFoundError("Item not found"));
       }
       return res.status(GOOD_REQUEST_STATUS_CODE).send({ data: like });
     })
@@ -70,7 +70,7 @@ module.exports.dislikeItem = (req, res, next) =>
     )
     .then((like) => {
       if (!like) {
-        next(new NotFoundError("Item not found"));
+        return next(new NotFoundError("Item not found"));
       }
       return res.status(GOOD_REQUEST_STATUS_CODE).send({ data: like });
     })
@@ -89,10 +89,10 @@ module.exports.deleteClothingItem = (req, res, next) => {
 
     .then((item) => {
       if (!item) {
-        next(new NotFoundError("Item not found"));
+        return next(new NotFoundError("Item not found"));
       }
       if (item.owner.toString() !== req.user._id) {
-        next(new ForbiddenError("You can only delete your own items"));
+        return next(new ForbiddenError("You can only delete your own items"));
       }
 
       return clothingItem
