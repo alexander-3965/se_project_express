@@ -43,10 +43,10 @@ module.exports.getCurrentUser = (req, res, next) => {
     .catch((err) => {
       console.error(err);
       if (err.name === "CastError") {
-        next(new BadRequestError("Invalid user ID"));
+        return next(new BadRequestError("Invalid user ID"));
       }
       if (err.name === "DocumentNotFoundError") {
-        next(new NotFoundError("User not found"));
+        return next(new NotFoundError("User not found"));
       }
       next(err);
     });
